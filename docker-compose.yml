@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  backend:
+    build: ./docker/go
+    tty: true
+    ports:
+      - 8080:8080
+    volumes:
+      - ./backend:/go/src/server
+    working_dir: /go/src/server
+  frontend:
+    image: node:lts-slim
+    tty: true
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/workspaces
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSSWORD=password
+      - POSTGRES_DB=sample
+      - POSTGRES_USER=user
+volumes:
+  db-data:
