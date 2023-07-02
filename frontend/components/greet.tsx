@@ -2,7 +2,7 @@
 
 import { createPromiseClient } from "@bufbuild/connect"
 import { createConnectTransport } from "@bufbuild/connect-web"
-import { GreetService } from "@/gen/greet_connect"
+import { GreetService } from "@/gen/greet/v1/greet_connect"
 import { useState } from "react"
 
 const transport = createConnectTransport({

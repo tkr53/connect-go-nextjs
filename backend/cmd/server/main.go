@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 
@@ -28,26 +27,6 @@ func (s *GreetServer) Greet(
 	})
 	res.Header().Set("Greet-Version", "v1")
 	return res, nil
-}
-
-func (s *GreetServer) GreetBidiStream(
-	ctx context.Context,
-	stream *connect.BidiStream[greetv1.GreetBidiStreamRequest, greetv1.GreetBidiStreamResponse],
-) error {
-	for i := 0; ; i++ {
-		msg, err := stream.Receive()
-		if err == io.EOF {
-			return nil
-		}
-		if err != nil {
-			return err
-		}
-		if err := stream.Send(&greetv1.GreetBidiStreamResponse{
-			Greeting: fmt.Sprintf("Hello, %s! (%d)", msg.Name, i),
-		}); err != nil {
-			return connect.NewError(connect.CodeInternal, fmt.Errorf("failed to send response: %w", err))
-		}
-	}
 }
 
 func main() {

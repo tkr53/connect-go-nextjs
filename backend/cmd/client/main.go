@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"net/http"
 
 	greetv1 "connect/gen/greet/v1"
 	"connect/gen/greet/v1/greetv1connect"
+
+	"github.com/bufbuild/connect-go"
 )
 
 func main() {
@@ -14,13 +16,13 @@ func main() {
 		http.DefaultClient,
 		"http://localhost:8080",
 	)
-	stream := client.GreetBidiStream(context.Background())
-	for i := 0; i < 10; i++ {
-		if err := stream.Send(&greetv1.GreetBidiStreamRequest{
-			Name: fmt.Sprintf("%s (%d)", fmt.Sprintf("res%d", i), i),
-		}); err != nil {
-			fmt.Println(err)
-		}
+	res, err := client.Greet(
+		context.Background(),
+		connect.NewRequest(&greetv1.GreetRequest{Name: "Jane"}),
+	)
+	if err != nil {
+		log.Println(err)
+		return
 	}
-	stream.CloseRequest()
+	log.Println(res.Msg.Greeting)
 }

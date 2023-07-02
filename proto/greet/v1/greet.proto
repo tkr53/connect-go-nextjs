@@ -10,15 +10,6 @@ message GreetResponse {
   string greeting = 1;
 }
 
-message GreetBidiStreamRequest {
-  string name = 1;
-}
-
-message GreetBidiStreamResponse {
-  string greeting = 1;
-}
-
 service GreetService {
   rpc Greet(GreetRequest) returns (GreetResponse) {}
-  rpc GreetBidiStream(stream GreetBidiStreamRequest) returns (stream GreetBidiStreamResponse) {}
 }
